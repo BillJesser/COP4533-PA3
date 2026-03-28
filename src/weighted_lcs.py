@@ -1,3 +1,4 @@
+import sys
 from collections import OrderedDict
 
 
@@ -54,6 +55,7 @@ def parse_input(text: str) -> tuple[dict[str, int], str, str]:
 def weighted_lcs(values: dict[str, int], a: str, b: str) -> tuple[int, str]:
     n = len(a)
     m = len(b)
+    sys.setrecursionlimit(max(1000, 4 * (n + m) + 100))
 
     @lru_cache(maxsize=None)
     def best(i: int, j: int) -> int:
