@@ -1,4 +1,3 @@
-import sys
 from collections import OrderedDict
 
 
@@ -25,25 +24,34 @@ def lru_cache(maxsize=None):
     return decorator
 
 
-def solve() -> None:
-    data = sys.stdin.read().splitlines()
-    if not data:
-        return
+def parse_input(text: str) -> tuple[dict[str, int], str, str]:
+    lines = text.splitlines()
+    if not lines:
+        raise ValueError("Input is empty.")
 
     idx = 0
-    k = int(data[idx].strip())
+    k = int(lines[idx].strip())
     idx += 1
 
     values: dict[str, int] = {}
     for _ in range(k):
-        ch, value = data[idx].split()
+        ch, value = lines[idx].split()
         values[ch] = int(value)
         idx += 1
 
-    a = data[idx].rstrip("\n")
+    if idx >= len(lines):
+        raise ValueError("Missing first string A.")
+    a = lines[idx]
     idx += 1
-    b = data[idx].rstrip("\n")
 
+    if idx >= len(lines):
+        raise ValueError("Missing second string B.")
+    b = lines[idx]
+
+    return values, a, b
+
+
+def weighted_lcs(values: dict[str, int], a: str, b: str) -> tuple[int, str]:
     n = len(a)
     m = len(b)
 
@@ -57,22 +65,30 @@ def solve() -> None:
             answer = max(answer, values.get(a[i], 0) + best(i + 1, j + 1))
         return answer
 
-    def build(i: int, j: int) -> str:
-        if i == n or j == m:
-            return ""
+    i = 0
+    j = 0
+    subsequence: list[str] = []
+
+    while i < n and j < m:
+        current = best(i, j)
 
         if a[i] == b[j]:
             take = values.get(a[i], 0) + best(i + 1, j + 1)
-            if best(i, j) == take:
-                return a[i] + build(i + 1, j + 1)
+            if current == take:
+                subsequence.append(a[i])
+                i += 1
+                j += 1
+                continue
 
-        if best(i, j) == best(i + 1, j):
-            return build(i + 1, j)
-        return build(i, j + 1)
+        if current == best(i + 1, j):
+            i += 1
+        else:
+            j += 1
 
-    print(best(0, 0))
-    print(build(0, 0))
+    return best(0, 0), "".join(subsequence)
 
 
-if __name__ == "__main__":
-    solve()
+def solve_text(text: str) -> str:
+    values, a, b = parse_input(text)
+    total_value, subsequence = weighted_lcs(values, a, b)
+    return f"{total_value}\n{subsequence}\n"
