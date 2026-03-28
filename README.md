@@ -94,7 +94,7 @@ python -m unittest discover -s .\tests -v
 
 ## Question 1: Empirical Comparison
 
-I used 10 nontrivial benchmark inputs, each with `|A| = |B| >= 50`. The benchmark files are:
+I used 10 nontrivial benchmark inputs, each with |A| = |B| >= 50. The benchmark files are:
 
 - `data/benchmarks/bench_01.in`
 - `data/benchmarks/bench_02.in`
@@ -122,17 +122,17 @@ I used those displayed timings to build the graphs below.
 
 
 The graph shows clear growth as the string sizes increase. Since both strings grow together, the
-observed trend is consistent with the expected `O(|A| * |B|)` dynamic-programming runtime.
+observed trend is consistent with the expected O(|A| * |B|) dynamic-programming runtime.
 
 ## Question 2: Recurrence Equation
 
-Let `OPT(i, j)` be the maximum possible total value of a common subsequence between the suffixes
+Let OPT(i, j) be the maximum possible total value of a common subsequence between the suffixes
 `A[i:]` and `B[j:]`.
 
 Base cases:
 
-- `OPT(i, j) = 0` if `i = |A|`
-- `OPT(i, j) = 0` if `j = |B|`
+- OPT(i, j) = 0 if i = |A|
+- OPT(i, j) = 0 if j = |B|
 
 Recurrence:
 
@@ -154,7 +154,7 @@ Why this is correct:
 ## Question 3: Pseudocode And Big-Oh
 
 The assignment objective is to maximize value. The pseudocode below computes that maximum value.
-If literal subsequence length is required instead, replace `value(A[i])` with `1`.
+If literal subsequence length is required instead, replace `value(A[i])` with 1.
 
 ```text
 HVLCS-VALUE(A, B, value):
@@ -178,21 +178,11 @@ HVLCS-VALUE(A, B, value):
 
 Runtime:
 
-- There are `(n + 1) * (m + 1)` table entries.
-- Each entry is filled in `O(1)` time.
-- Total runtime is `O(nm)`.
+- There are (n + 1) * (m + 1) table entries.
+- Each entry is filled in O(1) time.
+- Total runtime is O(nm).
 
 Space usage:
 
-- The full table uses `O(nm)` space.
-- Reconstructing one optimal subsequence from the table takes an additional `O(n + m)` time.
-
-## Assumptions
-
-- Input format is:
-  - Line 1: `K`, the number of characters with assigned values
-  - Next `K` lines: a character and its nonnegative integer value
-  - Next line: string `A`
-  - Next line: string `B`
-- If multiple optimal subsequences exist, any one of them is acceptable
-- Characters not listed in the value table are treated as value `0`
+- The full table uses O(nm) space.
+- Reconstructing one optimal subsequence from the table takes an additional O(n + m) time.
