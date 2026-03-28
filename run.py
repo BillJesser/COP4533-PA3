@@ -1,5 +1,6 @@
 import argparse
 import sys
+import time
 from pathlib import Path
 
 from src.weighted_lcs import solve_text
@@ -30,12 +31,16 @@ def main() -> None:
     else:
         problem_text = sys.stdin.read()
 
+    start = time.perf_counter()
     answer = solve_text(problem_text)
+    elapsed_ms = (time.perf_counter() - start) * 1000.0
 
     if args.output:
         Path(args.output).write_text(answer, encoding="utf-8")
     else:
         sys.stdout.write(answer)
+
+    sys.stderr.write(f"Execution time: {elapsed_ms:.3f} ms\n")
 
 
 if __name__ == "__main__":

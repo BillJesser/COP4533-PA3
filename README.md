@@ -14,8 +14,6 @@ COP4533-PA3/
 |   `-- benchmarks/
 |       |-- bench_01.in ... bench_10.in
 |       `-- runtime_results.csv
-|-- scripts/
-|   `-- benchmark.py
 |-- src/
 |   |-- __init__.py
 |   `-- weighted_lcs.py
@@ -49,7 +47,7 @@ No build step is required.
 Optional syntax check:
 
 ```powershell
-python -m py_compile .\run.py .\src\weighted_lcs.py .\scripts\benchmark.py
+python -m py_compile .\run.py .\src\weighted_lcs.py
 ```
 
 ## Running The Program
@@ -59,6 +57,9 @@ Pass an input file directly:
 ```powershell
 python .\run.py .\data\example.in
 ```
+
+Each run prints the solver answer to standard output and the elapsed execution time to standard
+error.
 
 Write the result to a file:
 
@@ -106,15 +107,15 @@ I used 10 nontrivial benchmark inputs, each with `|A| = |B| >= 50`. The benchmar
 - `data/benchmarks/bench_09.in`
 - `data/benchmarks/bench_10.in`
 
-They were generated and timed with:
+To time any benchmark run, execute the program on that file. For example:
 
 ```powershell
-python .\scripts\benchmark.py
+python .\run.py .\data\benchmarks\bench_01.in
 ```
 
-That script regenerates the 10 benchmark inputs and writes the measured runtimes to
-`data/benchmarks/runtime_results.csv`. Each data point below is the median of 15 runs on the
-current machine.
+The program will display the answer and then print a line like `Execution time: 4.186 ms`.
+I used those displayed timings to build the graphs below.
+
 ![alt text](image-1.png)
 ![alt text](image.png)
 
