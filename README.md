@@ -94,7 +94,7 @@ python -m unittest discover -s .\tests -v
 
 ## Question 1: Empirical Comparison
 
-I used 10 nontrivial benchmark inputs, each with |A| = |B| >= 50. The benchmark files are:
+I used 10 benchmark inputs, each with |A| = |B| >= 50. The benchmark files are:
 
 - `data/benchmarks/bench_01.in`
 - `data/benchmarks/bench_02.in`
@@ -116,8 +116,8 @@ python .\run.py .\data\benchmarks\bench_01.in
 The program will display the answer and then print a line like `Execution time: 4.186 ms`.
 I used those displayed timings to build the graphs below.
 
-![alt text](image-1.png)
-![alt text](image.png)
+![alt text](table.png)
+![alt text](graph.png)
 
 
 
@@ -162,13 +162,13 @@ HVLCS-VALUE(A, B, value):
     m <- length(B)
     create table DP[0..n][0..m]
 
-    for i <- 0 to n:
+    for i = 0 to n:
         DP[i][m] <- 0
-    for j <- 0 to m:
+    for j = 0 to m:
         DP[n][j] <- 0
 
-    for i <- n - 1 downto 0:
-        for j <- m - 1 downto 0:
+    for i = n - 1 downto 0:
+        for j = m - 1 downto 0:
             DP[i][j] <- max(DP[i + 1][j], DP[i][j + 1])
             if A[i] = B[j]:
                 DP[i][j] <- max(DP[i][j], value(A[i]) + DP[i + 1][j + 1])
@@ -186,3 +186,15 @@ Space usage:
 
 - The full table uses O(nm) space.
 - Reconstructing one optimal subsequence from the table takes an additional O(n + m) time.
+
+## Assumptions
+
+- The input format is exactly:
+  - Line 1: `K`
+  - Next `K` lines: one character and its nonnegative integer value
+  - Next line: string `A`
+  - Next line: string `B`
+- Characters not listed in the value table are treated as having value `0`
+- If multiple optimal common subsequences exist, any one of them is acceptable output
+- The program requires Python 3.9 or newer and uses only the Python standard library
+- The timing line shown during execution is diagnostic output and is printed to standard error
