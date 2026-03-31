@@ -32,8 +32,8 @@ a nonnegative value for each character, the program prints:
 1. The maximum total value of a common subsequence
 2. One optimal subsequence that achieves that value
 
-The implementation in `src/weighted_lcs.py` uses top-down dynamic programming with memoization
-and then reconstructs one optimal subsequence from the cached results.
+The implementation in `src/weighted_lcs.py` uses bottom-up dynamic programming and then
+reconstructs one optimal subsequence from the completed table.
 
 ## Requirements
 

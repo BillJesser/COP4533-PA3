@@ -1,30 +1,3 @@
-import sys
-from collections import OrderedDict
-
-
-def lru_cache(maxsize=None):
-    def decorator(func):
-        cache = OrderedDict()
-
-        def wrapper(i: int, j: int) -> int:
-            key = (i, j)
-            if key in cache:
-                cache.move_to_end(key)
-                return cache[key]
-
-            result = func(i, j)
-            cache[key] = result
-
-            if maxsize is not None and len(cache) > maxsize:
-                cache.popitem(last=False)
-
-            return result
-
-        return wrapper
-
-    return decorator
-
-
 def parse_input(text: str) -> tuple[dict[str, int], str, str]:
     lines = text.splitlines()
     if not lines:
@@ -55,39 +28,36 @@ def parse_input(text: str) -> tuple[dict[str, int], str, str]:
 def weighted_lcs(values: dict[str, int], a: str, b: str) -> tuple[int, str]:
     n = len(a)
     m = len(b)
-    sys.setrecursionlimit(max(1000, 4 * (n + m) + 100))
+    dp = [[0] * (m + 1) for _ in range(n + 1)]
 
-    @lru_cache(maxsize=None)
-    def best(i: int, j: int) -> int:
-        if i == n or j == m:
-            return 0
-
-        answer = max(best(i + 1, j), best(i, j + 1))
-        if a[i] == b[j]:
-            answer = max(answer, values.get(a[i], 0) + best(i + 1, j + 1))
-        return answer
+    for i in range(n - 1, -1, -1):
+        for j in range(m - 1, -1, -1):
+            best = max(dp[i + 1][j], dp[i][j + 1])
+            if a[i] == b[j]:
+                best = max(best, values.get(a[i], 0) + dp[i + 1][j + 1])
+            dp[i][j] = best
 
     i = 0
     j = 0
     subsequence: list[str] = []
 
     while i < n and j < m:
-        current = best(i, j)
+        current = dp[i][j]
 
         if a[i] == b[j]:
-            take = values.get(a[i], 0) + best(i + 1, j + 1)
+            take = values.get(a[i], 0) + dp[i + 1][j + 1]
             if current == take:
                 subsequence.append(a[i])
                 i += 1
                 j += 1
                 continue
 
-        if current == best(i + 1, j):
+        if current == dp[i + 1][j]:
             i += 1
         else:
             j += 1
 
-    return best(0, 0), "".join(subsequence)
+    return dp[0][0], "".join(subsequence)
 
 
 def solve_text(text: str) -> str:
